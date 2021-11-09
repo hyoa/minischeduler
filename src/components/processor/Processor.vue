@@ -1,5 +1,5 @@
 <template>
-  <div class="shadow-lg rounded px-2 py-2">
+  <div class="shadow-lg rounded px-2 py-2 bg-white text-black">
     <h2 class="text-2xl">Processor</h2>
     <div>
       <div
@@ -15,7 +15,8 @@
         <div class="flex">
           <div
             v-for="job in queue.getJobs()" :key="job"
-            class="bg-pink-500 text-white p-2"
+            class="text-white p-2"
+            :class="`bg-${job.color}-500`"
           >
            {{ job.owner }} - {{ job.externalId }}
           </div>

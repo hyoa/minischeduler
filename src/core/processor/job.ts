@@ -9,10 +9,13 @@ export default class Job {
 
   progression: number;
 
-  constructor(externalId: string, owner: string, duration: number) {
+  color: string;
+
+  constructor(externalId: string, owner: string, duration: number, color: string) {
     this.externalId = externalId;
     this.duration = duration;
     this.owner = owner;
     this.progression = 0;
+    this.color = color;
   }
 }

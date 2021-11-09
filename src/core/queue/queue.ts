@@ -7,10 +7,13 @@ export default class Queue {
 
   private items: Array<Item>
 
-  constructor(id: string, name: string) {
+  readonly color: string;
+
+  constructor(id: string, name: string, color: string) {
     this.id = id;
     this.name = name;
     this.items = [];
+    this.color = color;
   }
 
   addItem(item: Item): void {

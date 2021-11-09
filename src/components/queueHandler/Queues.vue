@@ -1,5 +1,5 @@
 <template>
-  <div class="shadow-lg rounded px-2 py-2">
+  <div class="shadow-lg rounded px-2 py-2 bg-white text-black">
     <div>
       <h2 class="text-2xl">
         Queues
@@ -43,6 +43,13 @@ import QueueComponent from './Queue.vue';
       addQueue: {
         name: null,
       },
+      availableColors: [
+        'red',
+        'indigo',
+        'pink',
+        'green',
+        'blue',
+      ],
     };
   },
   components: {
@@ -55,9 +62,12 @@ import QueueComponent from './Queue.vue';
   },
   methods: {
     createQueue() {
-      this.$store.commit(MutationTypes.ADD_QUEUE, new Queue(uniqid(), this.addQueue.name));
-      this.addQueue.name = null;
-      this.toggleCreateQueue = false;
+      if (this.availableColors.length > 0) {
+        const color = this.availableColors.shift();
+        this.$store.commit(MutationTypes.ADD_QUEUE, new Queue(uniqid(), this.addQueue.name, color));
+        this.addQueue.name = null;
+        this.toggleCreateQueue = false;
+      }
     },
   },
 })

@@ -1,5 +1,5 @@
 <template>
-  <div class="shadow-lg mr-6 rounded px-2 py-2">
+  <div class="shadow-lg mr-6 rounded px-2 py-2 bg-white text-black">
     <div>
       <h2 class="text-2xl">Scheduler</h2>
       <div class="text-gray-500">
@@ -25,9 +25,9 @@
       </div>
     </div>
     <div class="mt-4">
-      <div v-for="log in logs" :key="log">
-        {{ log }}
-      </div>
+      <ul class="w-full steps steps-vertical">
+        <li :class="`step ${step.status}`" v-for="step in tree" :key="step">{{ step.name }}</li>
+      </ul>
     </div>
   </div>
 </template>
@@ -42,6 +42,9 @@ import { Vue, Options } from 'vue-class-component';
     },
     logs() {
       return this.$store.getters.logs;
+    },
+    tree() {
+      return this.$store.getters.tree;
     },
   },
   methods: {

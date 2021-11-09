@@ -25,8 +25,13 @@ export default class Processor {
     return false;
   }
 
-  static createJob(externalId: string, owner: string): Job {
-    return new Job(externalId, owner, (Math.floor(Math.random() * (120 - 20 + 1) + 20)) * 1000);
+  static createJob(externalId: string, owner: string, color: string): Job {
+    return new Job(
+      externalId,
+      owner,
+      (Math.floor(Math.random() * (120 - 20 + 1) + 20)) * 1000,
+      color,
+    );
   }
 
   addJob(job: Job): void {

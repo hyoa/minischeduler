@@ -6,8 +6,17 @@ import { State } from '../state';
 import Queue from '@/core/queue/queue';
 import Item from '@/core/queue/item';
 import Processor from '@/core/processor/processor';
+import Step from '@/core/processor/step';
 
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+const resetTree = () => ([
+  new Step(1, 'Start', ''),
+  new Step(2, 'Check slot', ''),
+  new Step(3, 'Check job', ''),
+  new Step(4, 'Send job', ''),
+  new Step(5, 'Switch queue', ''),
+]);
 
 export interface AddItemToQueuePayload {
   queueName: string,
@@ -32,44 +41,45 @@ export const mutations: MutationTree<State> & Mutations = {
     }
   },
   async [MutationTypes.RUN](state: State) {
-    state.tree = {};
+    state.tree = resetTree();
     const currentQueue = state.scheduler.getCurrentQueue();
 
     if (!currentQueue) {
       return;
     }
+    state.tree[0].status = 'step-primary';
 
     state.logs = [];
     state.logs.push(`Starting process for ${currentQueue}`);
     state.scheduler.isRunning = true;
-    state.tree = {
-      label: `Starting process for ${currentQueue}`,
-    };
 
     await delay(500);
     const hasEmptySlot = state.processor.hasEmptySlot();
 
-    state.tree = {
-      label: 'Check slot',
-    };
     if (hasEmptySlot) {
       const queue = state.queues.find((q) => q.name === currentQueue);
       state.logs.push('Processor has empty slot');
+      state.tree[1].status = 'step-primary';
 
       await delay(200);
       const item = queue?.getItemWithHighestPriority();
 
       if (item) {
+        state.tree[2].status = 'step-primary';
+        state.tree[3].status = 'step-primary';
         state.logs.push(`Queue "${queue?.name}" send item "${item.id}" to processor`);
-        const job = Processor.createJob(item.id, currentQueue);
+        const job = Processor.createJob(item.id, currentQueue, item.color);
         state.processor.addJob(job);
       } else {
+        state.tree[2].status = 'step-warning';
         state.logs.push(`Queue "${queue?.name}" has no item to send`);
       }
 
+      state.tree[4].status = 'step-primary';
       state.logs.push('Changing current queue for scheduler');
       state.scheduler.changeCurrentQueue();
     } else {
+      state.tree[1].status = 'step-error';
       state.logs.push('Processor has no empty slot');
     }
 

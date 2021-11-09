@@ -1,7 +1,10 @@
 export default class Item {
   id: string
 
-  constructor(id: string) {
+  readonly color: string
+
+  constructor(id: string, color: string) {
     this.id = id;
+    this.color = color;
   }
 }
