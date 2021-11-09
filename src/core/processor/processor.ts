@@ -29,7 +29,7 @@ export default class Processor {
     return new Job(
       externalId,
       owner,
-      (Math.floor(Math.random() * (120 - 20 + 1) + 20)) * 1000,
+      (Math.floor(Math.random() * (90 - 20 + 1) + 20)) * 1000,
       color,
     );
   }
